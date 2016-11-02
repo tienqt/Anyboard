@@ -101,7 +101,9 @@
         HAS_RFID: 71,
         HAS_NFC: 72,
         HAS_ACCELEROMETER: 73,
-        HAS_TEMPERATURE: 74
+        HAS_TEMPERATURE: 74,
+        VIBRATE: 200,
+        TAP: 201
     };
 
     /* Internal mapping between color strings to Uint8 array of RGB colors */
@@ -196,7 +198,11 @@
             "HAS_TEMPERATURE",
             rfduinoBluetooth._CMD_CODE.HAS_TEMPERATURE,
             NO_PARAMS,
-            USE_CACHE)
+            USE_CACHE),
+        VIBRATE: rfduinoBluetooth._GenericSend(
+            "VIBRATE",
+            rfduinoBluetooth._CMD_CODE.VIBRATE,
+            HAS_PARAMS)
     };
 
     /**
@@ -337,6 +343,12 @@
                 case rfduinoBluetooth._CMD_CODE.HAS_TEMPERATURE:
                     token.trigger('HAS_TEMPERATURE', {"value": uint8array[1]})
                     break;
+                case rfduinoBluetooth._CMD_CODE.VIBRATE:
+                    token.trigger('VIBRATE');
+                    break;
+                case rfduinoBluetooth._CMD_CODE.TAP:
+                    token.trigger('TAP', {"meta-eventType": "token"});
+                    break;
                 default:
                     token.trigger('INVALID_DATA_RECEIVE', {"value": uint8array});
             }
@@ -398,7 +410,11 @@
     rfduinoBluetooth.hasTemperature = function(token, win, fail) {
         this._COMMANDS.HAS_TEMPERATURE(token, win, fail);
     };
-
+    
+    rfduinoBluetooth.vibrate = function(token, value, win, fail) {
+        this._COMMANDS.VIBRATE(token, new Uint8Array([value]), win, fail);
+    };
+    
     rfduinoBluetooth.ledOn = function (token, value, win, fail) {
         value = value || 'white';
 
