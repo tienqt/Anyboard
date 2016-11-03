@@ -713,6 +713,21 @@ AnyBoard.BaseToken.prototype.ledOff = function(win, fail) {
 };
 
 /**
+ * Turns on vibration for a number of milliseconds
+ * @param {number} number of milliseconds to vibrate
+ * @param {stdNoParamCallback} [win] *(optional)* callback function to be called upon successful execution
+ * @param {stdErrorCallback} [fail] *(optional)* callback function to be executed upon
+ */
+AnyBoard.BaseToken.prototype.vibrate = function(value, win, fail) {
+    if (!this.driver.hasOwnProperty('vibrate')) {
+        AnyBoard.Logger.warn('This token has not implemented vibrate', this);
+        fail && fail('This token has not implemented vibrate');
+    } else {
+        this.driver.vibrate(this, value, win, fail);
+    }
+};
+
+/**
  * Representational string of class instance.
  * @returns {string}
  */
