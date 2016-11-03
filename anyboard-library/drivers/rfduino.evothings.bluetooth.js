@@ -103,7 +103,9 @@
         HAS_ACCELEROMETER: 73,
         HAS_TEMPERATURE: 74,
         VIBRATE: 200,
-        TAP: 201
+        
+        TAP: 201,
+        DOUBLE_TAP: 202
     };
 
     /* Internal mapping between color strings to Uint8 array of RGB colors */
@@ -348,6 +350,9 @@
                     break;
                 case rfduinoBluetooth._CMD_CODE.TAP:
                     token.trigger('TAP', {"meta-eventType": "token"});
+                    break;
+                case rfduinoBluetooth._CMD_CODE.DOUBLE_TAP:
+                    token.trigger('DOUBLE_TAP', {"meta-eventType": "token"});
                     break;
                 default:
                     token.trigger('INVALID_DATA_RECEIVE', {"value": uint8array});
