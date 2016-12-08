@@ -172,3 +172,37 @@ AnyBoard.Utils._deepEq = function (a, b, aStack, bStack) {
     bStack.pop();
     return true;
 };
+
+
+/**
+ * Converts a string to ArrayBuffer
+ * @param {String} a text to be converted
+ * @return {ArrayBuffer} converted ArrayBuffer
+ */
+AnyBoard.Utils.stringToArrayBuffer = function(str){
+    if(/[\u0080-\uffff]/.test(str)){
+        var arr = new Array(str.length);
+        for(var i=0, j=0, len=str.length; i<len; ++i){
+            var cc = str.charCodeAt(i);
+            if(cc < 128){
+                //single byte
+                arr[j++] = cc;
+            }else{
+                //UTF-8 multibyte
+                if(cc < 2048){
+                    arr[j++] = (cc >> 6) | 192;
+                }else{
+                    arr[j++] = (cc >> 12) | 224;
+                    arr[j++] = ((cc >> 6) & 63) | 128;
+                }
+                arr[j++] = (cc & 63) | 128;
+            }
+        }
+        var byteArray = new Uint8Array(arr);
+    }else{
+        var byteArray = new Uint8Array(str.length);
+        for(var i = str.length; i--; )
+            byteArray[i] = str.charCodeAt(i);
+    }
+    return byteArray.buffer;
+};
